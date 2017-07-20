@@ -80,15 +80,14 @@ def classify_demo(text):
 
     print ("Positive" if pprob > nprob else "Negative"), "log-diff = %.9f" % abs(pprob - nprob)
 
-def feature_selection_trials():
+def feature_selection_trials(fdata_file=FDATA_FILE, retrain=False):
     """
     Select top k features. Vary k and plot data
     """
     global pos, neg, totals, features
-    retrain = False
 
-    if not retrain and os.path.isfile(FDATA_FILE):
-        pos, neg, totals = pickle.load(open(FDATA_FILE))
+    if not retrain and os.path.isfile(fdata_file):
+        pos, neg, totals = pickle.load(open(fdata_file))
         return
 
 

@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 from math import log, exp
 from operator import mul
 from collections import Counter
@@ -67,18 +67,18 @@ def classify2(text):
 def classify_demo(text):
     words = set(word for word in negate_sequence(text) if word in pos or word in neg)
     if (len(words) == 0): 
-        print "No features to compare on"
+        print("No features to compare on")
         return True
 
     pprob, nprob = 0, 0
     for word in words:
         pp = log((pos[word] + 1) / (2 * totals[0]))
         np = log((neg[word] + 1) / (2 * totals[1]))
-        print "%15s %.9f %.9f" % (word, exp(pp), exp(np))
+        print("%15s %.9f %.9f" % (word, exp(pp), exp(np)))
         pprob += pp
         nprob += np
 
-    print ("Positive" if pprob > nprob else "Negative"), "log-diff = %.9f" % abs(pprob - nprob)
+    print(("Positive" if pprob > nprob else "Negative"), "log-diff = %.9f" % abs(pprob - nprob))
 
 def feature_selection_trials(fdata_file=FDATA_FILE, retrain=False):
     """
@@ -87,8 +87,12 @@ def feature_selection_trials(fdata_file=FDATA_FILE, retrain=False):
     global pos, neg, totals, features
 
     if not retrain and os.path.isfile(fdata_file):
-        pos, neg, totals = pickle.load(open(fdata_file))
-        return
+        try:
+            pos, neg, totals = pickle.load(open(fdata_file))
+        except:
+            pos, neg, totals = pickle.load(open(fdata_file, 'rb'), encoding='latin1')
+        finally:
+            return
 
 
 if __name__ == '__main__':
